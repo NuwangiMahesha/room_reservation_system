@@ -1,0 +1,116 @@
+package com.oceanview.controller;
+
+import com.oceanview.dto.ApiResponse;
+import com.oceanview.dto.ReservationRequest;
+import com.oceanview.dto.ReservationResponse;
+import com.oceanview.model.ReservationStatus;
+import com.oceanview.service.ReservationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * Reservation Controller
+ * RESTful API endpoints for reservation management
+ */
+@RestController
+@RequestMapping("/api/reservations")
+@RequiredArgsConstructor
+@Slf4j
+@Tag(name = "Reservations", description = "Reservation management endpoints")
+@SecurityRequirement(name = "Bearer Authentication")
+public class ReservationController {
+    
+    private final ReservationService reservationService;
+    
+    @PostMapping
+    @Operation(summary = "Create new reservation", description = "Create a new room reservation")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'MANAGER')")
+    public ResponseEntity<ApiResponse<ReservationResponse>> createReservation(
+            @Valid @RequestBody ReservationRequest request) {
+        
+        log.info("Creating reservation for guest: {}", request.getGuestName());
+        ReservationResponse response = reservationService.createReservation(request);
+        
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(ApiResponse.success("Reservation created successfully", response));
+    }
+    
+    @GetMapping
+    @Operation(summary = "Get all reservations", description = "Retrieve all reservations")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'MANAGER')")
+    public ResponseEntity<ApiResponse<List<ReservationResponse>>> getAllReservations() {
+        log.info("Fetching all reservations");
+        List<ReservationResponse> reservations = reservationService.getAllReservations();
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Reservations retrieved successfully", reservations)
+        );
+    }
+    
+    @GetMapping("/{reservationNumber}")
+    @Operation(summary = "Get reservation by number", description = "Retrieve specific reservation details")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'MANAGER')")
+    public ResponseEntity<ApiResponse<ReservationResponse>> getReservation(
+            @PathVariable String reservationNumber) {
+        
+        log.info("Fetching reservation: {}", reservationNumber);
+        ReservationResponse response = reservationService.getReservationByNumber(reservationNumber);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Reservation retrieved successfully", response)
+        );
+    }
+    
+    @GetMapping("/search")
+    @Operation(summary = "Search reservations", description = "Search reservations by guest name")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'MANAGER')")
+    public ResponseEntity<ApiResponse<List<ReservationResponse>>> searchReservations(
+            @RequestParam String name) {
+        
+        log.info("Searching reservations for guest: {}", name);
+        List<ReservationResponse> reservations = reservationService.searchByGuestName(name);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Search completed successfully", reservations)
+        );
+    }
+    
+    @PutMapping("/{reservationNumber}/status")
+    @Operation(summary = "Update reservation status", description = "Update the status of a reservation")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'MANAGER')")
+    public ResponseEntity<ApiResponse<ReservationResponse>> updateStatus(
+            @PathVariable String reservationNumber,
+            @RequestParam ReservationStatus status) {
+        
+        log.info("Updating reservation {} to status: {}", reservationNumber, status);
+        ReservationResponse response = reservationService.updateReservationStatus(reservationNumber, status);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Reservation status updated successfully", response)
+        );
+    }
+    
+    @PutMapping("/{reservationNumber}/cancel")
+    @Operation(summary = "Cancel reservation", description = "Cancel a reservation")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<ApiResponse<ReservationResponse>> cancelReservation(
+            @PathVariable String reservationNumber) {
+        
+        log.info("Cancelling reservation: {}", reservationNumber);
+        ReservationResponse response = reservationService.cancelReservation(reservationNumber);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Reservation cancelled successfully", response)
+        );
+    }
+}
