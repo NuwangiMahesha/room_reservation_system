@@ -43,6 +43,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/api/auth/**",
+                    "/api/reservations/public",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**",
@@ -51,9 +52,19 @@ public class SecurityConfig {
                     "/",
                     "/index.html",
                     "/login.html",
+                    "/welcome.html",
+                    "/book.html",
+                    "/test.html",
+                    "/customer/**",
                     "/css/**",
                     "/js/**",
-                    "/*.html"
+                    "/images/**",
+                    "/*.html",
+                    "/*.png",
+                    "/*.jpg",
+                    "/*.jpeg",
+                    "/*.gif",
+                    "/*.svg"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

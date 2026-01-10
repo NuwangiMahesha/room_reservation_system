@@ -49,6 +49,18 @@ public class ReservationController {
             .body(ApiResponse.success("Reservation created successfully", response));
     }
     
+    @PostMapping("/public")
+    @Operation(summary = "Create public reservation request", description = "Create a reservation request from customer portal (no authentication required)")
+    public ResponseEntity<ApiResponse<ReservationResponse>> createPublicReservation(
+            @Valid @RequestBody ReservationRequest request) {
+        
+        log.info("Creating public reservation request for guest: {}", request.getGuestName());
+        ReservationResponse response = reservationService.createReservation(request);
+        
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(ApiResponse.success("Reservation request submitted successfully. Our team will contact you shortly to confirm.", response));
+    }
+    
     @GetMapping
     @Operation(summary = "Get all reservations", description = "Retrieve all reservations")
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'MANAGER')")
