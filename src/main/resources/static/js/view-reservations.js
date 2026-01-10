@@ -46,6 +46,8 @@ function displayReservations(reservations) {
         
         if (reservation.status === 'CONFIRMED') {
             actionButtons += `<button onclick="checkIn('${reservation.reservationNumber}')" class="btn btn-success" style="padding: 0.5rem 1rem; font-size: 0.875rem; margin: 0.2rem;">Check In</button>`;
+            actionButtons += `<button onclick="editReservation('${reservation.reservationNumber}')" class="btn btn-warning" style="padding: 0.5rem 1rem; font-size: 0.875rem; margin: 0.2rem;">Edit</button>`;
+            actionButtons += `<button onclick="deleteReservation('${reservation.reservationNumber}')" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem; margin: 0.2rem; background: #dc3545;">Delete</button>`;
         } else if (reservation.status === 'CHECKED_IN') {
             actionButtons += `<button onclick="checkOut('${reservation.reservationNumber}')" class="btn btn-warning" style="padding: 0.5rem 1rem; font-size: 0.875rem; margin: 0.2rem;">Check Out</button>`;
         }
@@ -187,3 +189,51 @@ async function checkOut(reservationNumber) {
 document.addEventListener('DOMContentLoaded', function() {
     loadReservations();
 });
+
+// Edit reservation
+async function editReservation(reservationNumber) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/reservations/${reservationNumber}`, {
+            headers: getAuthHeaders()
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            const reservation = data.data;
+            
+            // Store reservation data in sessionStorage for editing
+            sessionStorage.setItem('editReservation', JSON.stringify(reservation));
+            
+            // Redirect to add-reservation page with edit mode
+            window.location.href = `add-reservation.html?edit=${reservationNumber}`;
+        }
+    } catch (error) {
+        console.error('Error loading reservation for edit:', error);
+        alert('Unable to load reservation for editing');
+    }
+}
+
+// Delete reservation
+async function deleteReservation(reservationNumber) {
+    if (!confirm(`Are you sure you want to delete reservation ${reservationNumber}? This action cannot be undone.`)) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/reservations/${reservationNumber}/cancel`, {
+            method: 'PUT',
+            headers: getAuthHeaders()
+        });
+        
+        if (response.ok) {
+            alert('Reservation deleted successfully!');
+            loadReservations(); // Reload the list
+        } else {
+            const error = await response.json();
+            alert('Failed to delete reservation: ' + (error.message || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error deleting reservation:', error);
+        alert('Unable to delete reservation. Please try again.');
+    }
+}

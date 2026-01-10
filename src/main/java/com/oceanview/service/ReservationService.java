@@ -105,6 +105,39 @@ public class ReservationService {
     }
     
     /**
+     * Updates an existing reservation
+     */
+    public ReservationResponse updateReservation(String reservationNumber, ReservationRequest request) {
+        log.info("Updating reservation: {}", reservationNumber);
+        
+        Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber)
+            .orElseThrow(() -> new ResourceNotFoundException("Reservation not found: " + reservationNumber));
+        
+        // Only allow updates for CONFIRMED reservations
+        if (!reservation.getStatus().equals(ReservationStatus.CONFIRMED)) {
+            throw new ValidationException("Can only update CONFIRMED reservations");
+        }
+        
+        validateReservationDates(request.getCheckInDate(), request.getCheckOutDate());
+        
+        // Update fields
+        reservation.setGuestName(request.getGuestName());
+        reservation.setAddress(request.getAddress());
+        reservation.setContactNumber(request.getContactNumber());
+        reservation.setEmail(request.getEmail());
+        reservation.setRoomType(request.getRoomType());
+        reservation.setCheckInDate(request.getCheckInDate());
+        reservation.setCheckOutDate(request.getCheckOutDate());
+        reservation.setNumberOfGuests(request.getNumberOfGuests());
+        reservation.setSpecialRequests(request.getSpecialRequests());
+        
+        reservation = reservationRepository.save(reservation);
+        
+        log.info("Reservation updated successfully: {}", reservationNumber);
+        return mapToResponse(reservation);
+    }
+    
+    /**
      * Validates reservation dates
      */
     private void validateReservationDates(LocalDate checkIn, LocalDate checkOut) {

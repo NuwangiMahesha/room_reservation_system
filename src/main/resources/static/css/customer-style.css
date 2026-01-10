@@ -817,9 +817,64 @@ section {
 
 .price-calculation h3 {
     color: var(--primary-blue);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-size: 1.5rem;
     font-weight: 800;
+}
+
+.price-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(8, 131, 149, 0.1);
+    color: var(--text-dark);
+    font-size: 1rem;
+}
+
+.price-row:last-child {
+    border-bottom: none;
+}
+
+.price-row span:last-child {
+    font-weight: 700;
+    color: var(--primary-blue);
+}
+
+.price-row.highlight {
+    background: rgba(0, 217, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    border-bottom: none;
+    margin: 0.5rem 0;
+}
+
+.price-row.highlight span:last-child {
+    color: var(--secondary-blue);
+    font-size: 1.1rem;
+}
+
+.price-row.total {
+    padding: 1rem 0;
+    border-top: 2px solid var(--accent-orange);
+    border-bottom: none;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+.price-row.total span:last-child {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.4rem;
 }
 
 .nights-info {

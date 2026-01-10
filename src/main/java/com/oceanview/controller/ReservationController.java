@@ -129,4 +129,19 @@ public class ReservationController {
             ApiResponse.success("Reservation cancelled successfully", response)
         );
     }
+    
+    @PutMapping("/{reservationNumber}")
+    @Operation(summary = "Update reservation", description = "Update an existing reservation")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'MANAGER')")
+    public ResponseEntity<ApiResponse<ReservationResponse>> updateReservation(
+            @PathVariable String reservationNumber,
+            @Valid @RequestBody ReservationRequest request) {
+        
+        log.info("Updating reservation: {}", reservationNumber);
+        ReservationResponse response = reservationService.updateReservation(reservationNumber, request);
+        
+        return ResponseEntity.ok(
+            ApiResponse.success("Reservation updated successfully", response)
+        );
+    }
 }

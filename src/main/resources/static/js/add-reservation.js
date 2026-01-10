@@ -8,18 +8,42 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('checkInDate').addEventListener('change', updateCalculation);
     document.getElementById('checkOutDate').addEventListener('change', updateCalculation);
     document.getElementById('roomType').addEventListener('change', updateCalculation);
+    document.getElementById('numberOfGuests').addEventListener('change', updateCalculation);
+    
+    // Check if editing
+    const urlParams = new URLSearchParams(window.location.search);
+    const editReservationNumber = urlParams.get('edit');
+    
+    if (editReservationNumber) {
+        loadReservationForEdit(editReservationNumber);
+    }
 });
+
+// Room type pricing
+const roomPrices = {
+    'STANDARD': 5000,
+    'DELUXE': 8000,
+    'SUITE': 12000,
+    'FAMILY': 15000,
+    'PRESIDENTIAL': 25000
+};
 
 // Update calculation
 function updateCalculation() {
     const roomType = document.getElementById('roomType').value;
     const checkIn = document.getElementById('checkInDate').value;
     const checkOut = document.getElementById('checkOutDate').value;
+    const numberOfGuests = parseInt(document.getElementById('numberOfGuests').value) || 1;
     
     if (roomType && checkIn && checkOut) {
         const nights = calculateNights(checkIn, checkOut);
-        const total = calculateTotalAmount(roomType, checkIn, checkOut);
+        const pricePerNight = roomPrices[roomType];
+        const pricePerPersonPerNight = pricePerNight / numberOfGuests;
+        const total = pricePerNight * nights;
         
+        document.getElementById('pricePerNight').textContent = formatCurrency(pricePerNight);
+        document.getElementById('displayGuests').textContent = numberOfGuests;
+        document.getElementById('pricePerPersonPerNight').textContent = formatCurrency(pricePerPersonPerNight);
         document.getElementById('numberOfNights').textContent = nights;
         document.getElementById('totalAmount').textContent = formatCurrency(total);
         document.getElementById('calculatedAmount').style.display = 'block';
@@ -51,8 +75,21 @@ document.getElementById('reservationForm').addEventListener('submit', async func
     };
     
     try {
-        const response = await fetch(`${API_BASE_URL}/reservations`, {
-            method: 'POST',
+        const urlParams = new URLSearchParams(window.location.search);
+        const editReservationNumber = urlParams.get('edit');
+        
+        let url = `${API_BASE_URL}/reservations`;
+        let method = 'POST';
+        let successMessage = 'Reservation created successfully!';
+        
+        if (editReservationNumber) {
+            url = `${API_BASE_URL}/reservations/${editReservationNumber}`;
+            method = 'PUT';
+            successMessage = 'Reservation updated successfully!';
+        }
+        
+        const response = await fetch(url, {
+            method: method,
             headers: getAuthHeaders(),
             body: JSON.stringify(formData)
         });
@@ -60,15 +97,53 @@ document.getElementById('reservationForm').addEventListener('submit', async func
         const data = await response.json();
         
         if (response.ok && data.success) {
-            showSuccess('successMessage', `Reservation created successfully! Reservation Number: ${data.data.reservationNumber}`);
+            showSuccess('successMessage', `${successMessage} Reservation Number: ${data.data.reservationNumber}`);
             setTimeout(() => {
                 window.location.href = 'view-reservations.html';
             }, 2000);
         } else {
-            showError('errorMessage', data.message || 'Failed to create reservation');
+            showError('errorMessage', data.message || 'Failed to save reservation');
         }
     } catch (error) {
-        console.error('Error creating reservation:', error);
-        showError('errorMessage', 'Unable to create reservation. Please try again.');
+        console.error('Error saving reservation:', error);
+        showError('errorMessage', 'Unable to save reservation. Please try again.');
     }
 });
+
+
+// Load reservation for editing
+async function loadReservationForEdit(reservationNumber) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/reservations/${reservationNumber}`, {
+            headers: getAuthHeaders()
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            const reservation = data.data;
+            
+            // Update page title
+            document.getElementById('pageTitle').textContent = `Edit Reservation - ${reservationNumber}`;
+            document.getElementById('submitBtn').textContent = 'Update Reservation';
+            
+            // Populate form with current data
+            document.getElementById('guestName').value = reservation.guestName;
+            document.getElementById('address').value = reservation.address;
+            document.getElementById('contactNumber').value = reservation.contactNumber;
+            document.getElementById('email').value = reservation.email;
+            document.getElementById('roomType').value = reservation.roomType;
+            document.getElementById('checkInDate').value = reservation.checkInDate;
+            document.getElementById('checkOutDate').value = reservation.checkOutDate;
+            document.getElementById('numberOfGuests').value = reservation.numberOfGuests;
+            document.getElementById('specialRequests').value = reservation.specialRequests || '';
+            
+            // Trigger calculation to show current pricing
+            updateCalculation();
+        } else {
+            showError('errorMessage', 'Failed to load reservation for editing');
+        }
+    } catch (error) {
+        console.error('Error loading reservation:', error);
+        showError('errorMessage', 'Unable to load reservation. Please try again.');
+    }
+}

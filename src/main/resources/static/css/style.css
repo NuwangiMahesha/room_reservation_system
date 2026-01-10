@@ -113,6 +113,17 @@ body {
     background: #5a6268;
 }
 
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+}
+
 .btn-outline {
     background: white;
     color: #667eea;
@@ -340,24 +351,30 @@ body {
 
 /* Login Page */
 .login-page {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-image: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%), 
+                      url('../images/image6.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 2rem;
 }
 
 .login-container {
     width: 100%;
     max-width: 450px;
-    padding: 2rem;
 }
 
 .login-box {
     background: white;
     padding: 3rem;
     border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
 }
 
 .logo {
@@ -368,10 +385,12 @@ body {
 .logo h1 {
     color: #667eea;
     margin-bottom: 0.5rem;
+    font-size: 1.8rem;
 }
 
 .logo p {
     color: #999;
+    font-size: 0.95rem;
 }
 
 .login-help {
@@ -580,6 +599,19 @@ body {
     
     .action-buttons {
         grid-template-columns: 1fr;
+    }
+    
+    /* Login responsive */
+    .login-page {
+        padding: 1rem;
+    }
+    
+    .login-container {
+        max-width: 100%;
+    }
+    
+    .login-box {
+        padding: 2rem;
     }
 }
 

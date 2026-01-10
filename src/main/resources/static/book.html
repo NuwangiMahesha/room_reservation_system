@@ -340,9 +340,29 @@
                     </div>
 
                     <div id="priceCalculation" class="price-calculation" style="display: none;">
-                        <h3>Estimated Total</h3>
-                        <p class="nights-info">Number of nights: <span id="nightsCount">0</span></p>
-                        <p class="total-price">Total: <span id="totalPrice">LKR 0</span></p>
+                        <h3>Price Breakdown</h3>
+                        <div class="price-details">
+                            <div class="price-row">
+                                <span>Price per night (per room):</span>
+                                <span id="pricePerNight">LKR 0</span>
+                            </div>
+                            <div class="price-row">
+                                <span>Number of guests:</span>
+                                <span id="guestCount">1</span>
+                            </div>
+                            <div class="price-row highlight">
+                                <span>Price per person per night:</span>
+                                <span id="pricePerPersonPerNight">LKR 0</span>
+                            </div>
+                            <div class="price-row">
+                                <span>Number of nights:</span>
+                                <span id="nightsCount">0</span>
+                            </div>
+                            <div class="price-row total">
+                                <span>Total Amount:</span>
+                                <span id="totalPrice">LKR 0</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="errorMessage" class="error-message" style="display: none;"></div>

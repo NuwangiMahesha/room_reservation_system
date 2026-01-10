@@ -347,6 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('checkInDate').addEventListener('change', calculatePrice);
     document.getElementById('checkOutDate').addEventListener('change', calculatePrice);
     document.getElementById('roomType').addEventListener('change', calculatePrice);
+    document.getElementById('numberOfGuests').addEventListener('change', calculatePrice);
     
     // Form submission
     document.getElementById('bookingForm').addEventListener('submit', handleBookingSubmit);
@@ -364,6 +365,7 @@ function calculatePrice() {
     const roomType = document.getElementById('roomType').value;
     const checkIn = document.getElementById('checkInDate').value;
     const checkOut = document.getElementById('checkOutDate').value;
+    const numberOfGuests = parseInt(document.getElementById('numberOfGuests').value) || 1;
     
     if (roomType && checkIn && checkOut) {
         const checkInDate = new Date(checkIn);
@@ -377,8 +379,12 @@ function calculatePrice() {
         
         const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
         const rate = roomRates[roomType];
+        const pricePerPersonPerNight = rate / numberOfGuests;
         const total = nights * rate;
         
+        document.getElementById('pricePerNight').textContent = `LKR ${rate.toLocaleString()}`;
+        document.getElementById('guestCount').textContent = numberOfGuests;
+        document.getElementById('pricePerPersonPerNight').textContent = `LKR ${pricePerPersonPerNight.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
         document.getElementById('nightsCount').textContent = nights;
         document.getElementById('totalPrice').textContent = `LKR ${total.toLocaleString()}`;
         document.getElementById('priceCalculation').style.display = 'block';

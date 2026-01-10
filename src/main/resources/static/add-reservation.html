@@ -28,7 +28,7 @@
         </div>
         
         <div class="main-content">
-            <h1>Create New Reservation</h1>
+            <h1 id="pageTitle">Create New Reservation</h1>
             
             <div class="form-container">
                 <form id="reservationForm">
@@ -100,15 +100,22 @@
                     </div>
                     
                     <div id="calculatedAmount" class="calculated-amount" style="display: none;">
-                        <h3>Estimated Total: <span id="totalAmount">LKR 0</span></h3>
-                        <p>Number of nights: <span id="numberOfNights">0</span></p>
+                        <h3>Price Breakdown</h3>
+                        <div style="margin-top: 1rem;">
+                            <p><strong>Price per night (per room):</strong> <span id="pricePerNight">LKR 0</span></p>
+                            <p><strong>Number of guests:</strong> <span id="displayGuests">1</span></p>
+                            <p><strong>Price per person per night:</strong> <span id="pricePerPersonPerNight">LKR 0</span></p>
+                            <p><strong>Number of nights:</strong> <span id="numberOfNights">0</span></p>
+                            <hr style="margin: 1rem 0; border: none; border-top: 1px solid #ddd;">
+                            <p style="font-size: 1.1rem;"><strong>Total Amount:</strong> <span id="totalAmount" style="color: #667eea; font-size: 1.3rem;">LKR 0</span></p>
+                        </div>
                     </div>
                     
                     <div id="errorMessage" class="error-message" style="display: none;"></div>
                     <div id="successMessage" class="success-message" style="display: none;"></div>
                     
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Create Reservation</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary">Create Reservation</button>
                         <button type="button" onclick="resetForm()" class="btn btn-secondary">Reset</button>
                         <a href="dashboard.html" class="btn btn-outline">Cancel</a>
                     </div>
