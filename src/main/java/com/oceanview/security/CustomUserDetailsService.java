@@ -2,7 +2,6 @@ package com.oceanview.security;
 
 import com.oceanview.model.User;
 import com.oceanview.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,10 +15,13 @@ import java.util.Collections;
  * Loads user details for authentication
  */
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     
     private final UserRepository userRepository;
+    
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -2,9 +2,6 @@ package com.oceanview.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -14,9 +11,6 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "users")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
     
     @Id
@@ -41,6 +35,75 @@ public class User {
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+    
+    public User() {
+    }
+    
+    public User(Long id, String username, String password, String fullName, UserRole role, boolean active, LocalDateTime createdAt) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.role = role;
+        this.active = active;
+        this.createdAt = createdAt;
+    }
+    
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public String getFullName() {
+        return fullName;
+    }
+    
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    
+    public UserRole getRole() {
+        return role;
+    }
+    
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+    
+    public boolean isActive() {
+        return active;
+    }
+    
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
     
     @PrePersist
     protected void onCreate() {

@@ -73,7 +73,7 @@ public class JwtUtil {
             .parseClaimsJws(token)
             .getBody();
     }
-    
+
     /**
      * Gets signing key
      */

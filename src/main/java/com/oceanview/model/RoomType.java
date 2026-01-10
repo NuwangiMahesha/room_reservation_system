@@ -1,14 +1,11 @@
 package com.oceanview.model;
 
-import lombok.Getter;
-
 import java.math.BigDecimal;
 
 /**
  * Room Type Enumeration
  * Defines available room types with pricing
  */
-@Getter
 public enum RoomType {
     STANDARD(new BigDecimal("5000.00"), "Standard Room with basic amenities"),
     DELUXE(new BigDecimal("8000.00"), "Deluxe Room with ocean view"),
@@ -22,5 +19,13 @@ public enum RoomType {
     RoomType(BigDecimal ratePerNight, String description) {
         this.ratePerNight = ratePerNight;
         this.description = description;
+    }
+    
+    public BigDecimal getRatePerNight() {
+        return ratePerNight;
+    }
+    
+    public String getDescription() {
+        return description;
     }
 }
