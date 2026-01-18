@@ -59,6 +59,7 @@
             text-align: center;
             color: white;
             padding: 2rem;
+            padding-top: 140px;
         }
         
         .brand-logo {
@@ -170,7 +171,7 @@
             z-index: 3;
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(15px);
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             animation: slideDown 1s ease-out 0.5s both;
         }
         
@@ -180,13 +181,13 @@
             padding: 0 2rem;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
         }
         
         .feature-item {
             text-align: center;
             color: white;
-            padding: 1rem;
+            padding: 0.75rem;
             transition: all 0.3s;
         }
         
@@ -195,22 +196,22 @@
         }
         
         .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
         }
         
         .feature-title {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             letter-spacing: 0.5px;
         }
         
         .feature-text {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             opacity: 0.9;
-            line-height: 1.5;
+            line-height: 1.4;
         }
         
         /* Scroll Indicator */
@@ -332,6 +333,10 @@
             .brand-logo {
                 font-size: 1.8rem;
             }
+            
+            .hero-content {
+                padding-top: 120px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -345,6 +350,10 @@
             
             .features-container {
                 grid-template-columns: 1fr;
+            }
+            
+            .hero-content {
+                padding-top: 100px;
             }
         }
     </style>
