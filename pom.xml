@@ -135,15 +135,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0</version>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <outputFile>${outputFile}</outputFile>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
